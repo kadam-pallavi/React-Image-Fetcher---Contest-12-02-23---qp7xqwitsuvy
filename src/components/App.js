@@ -3,14 +3,15 @@ import '../styles/App.css';
 import { Loader } from './Loader';
 import { PhotoFrame } from './PhotoFrame';
 const App = () => {
-  const [idNumber, setIdNumber]=useState(false);
+  const [idNumber, setIdNumber]=useState();
+  const[isoloading, setIsLoading]=useState(false);
   const[data, setData]=useState();
   const handleChange =(e)=>{
-    setNumber(e.target.value);
+    setIdNumber(e.target.value);
   }
   
-  const imageFetcher = async (idNumber)=>{
-    setIsLoading(true);;
+  const imageFetcher = async(idNumber)=>{
+    setIsLoading(true);
     const res=await
     fetch(`https://jsonplaceholder.typicode.com/photos/${idNumber}`);
   const data=await res.json();
@@ -18,13 +19,15 @@ const App = () => {
     setIsLoading(false);
   }
   useEffect(()=>{
-imagefetcher(idNumber);
+imageFetcher(idNumber);
   },[idNumber]);
   
-  return(<div>
+  return(
+    <div>
          <label htmlFor='input'>idnumber</label>
          <input type='number' value={idNumber} onChange={handleChange}</input>
-{isloading && <photoFrame title={data.title} url ={data.url} />
+{isloading && </Loader />}
+{data && <PhotoFrame title={data.title}url{data.url} />}
   </div>
  );
  

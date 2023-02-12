@@ -13,7 +13,7 @@ const App = () => {
   const imageFetcher = async(idNumber)=>{
     setIsLoading(true);
     const res=await
-    fetch(`https://jsonplaceholder.typicode.com/photos/${idNumber}`);
+    fetch(`https://jsonplaceholder.typecode.com/photos/${idNumber}`);
   const data=await res.json();
     setData(data);
     setIsLoading(false);

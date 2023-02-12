@@ -1,36 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../styles/App.css';
 import { Loader } from './Loader';
 import { PhotoFrame } from './PhotoFrame';
+
+const fetchPosts = async (id) => {
+    let url = `https://jsonplaceholder.typicode.com/photos/${id}`;
+  return fetch(url);
+}
+
 const App = () => {
-  const [idNumber, setIdNumber]=useState();
-  const[isoloading, setIsLoading]=useState(false);
-  const[data, setData]=useState();
-  const handleChange =(e)=>{
-    setIdNumber(e.target.value);
-  }
-  
-  const imageFetcher = async(idNumber)=>{
-    setIsLoading(true);
-    const res=await
-    fetch(`https://jsonplaceholder.typecode.com/photos/${idNumber}`);
-  const data=await res.json();
-    setData(data);
-    setIsLoading(false);
-  }
-  useEffect(()=>{
-imageFetcher(idNumber);
-  },[idNumber]);
-  
-  return(
-    <div>
-         <label htmlFor='input'>idnumber</label>
-         <input type='number' value={idNumber} onChange={handleChange}</input>
-{isloading && </Loader />}
-{data && <PhotoFrame title={data.title}url{data.url} />}
-  </div>
- );
- 
+    const[data,setData]=useState([])
+    const[id,setId]=useState(null)
+    const handleChange=(e)=>{
+        setId(e.target.value)
+    }
+    
+    const loadData = async () => {
+        fetchPosts(id)
+          .then((res) => res.json())
+          .then((jsonData) => {
+            setData(jsonData);
+          })
+      }
+    
+      useEffect(() => {
+        loadData();
+      }, []);
+    
+      useEffect(() => {
+        setData(null)
+        loadData()
+      }, [id])
+
+    return(
+        <div>
+            <span>Id number</span>
+            <input type="number" onChange={handleChange} />
+            {data == null ? ( <Loader/> ) : <PhotoFrame url={data.url} title={data.title}/>}
+        </div>
+    )
 }
 
 
